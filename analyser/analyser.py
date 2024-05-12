@@ -5,8 +5,6 @@ from os.path import join
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage import median_filter
-import networkx as nx
-
 
 MNS_1 = imageio.imread('C:/Users/djab-/OneDrive/Bureau/Projet recherche/E494/dsm/DSC_1/dsm.tif')  # Pour corriger la micro-pente
 RESOLUTION  = 0.14
@@ -56,6 +54,3 @@ def plotHeatmap(MNS_F,xmin_m,xmax_m,ymin_m,ymax_m,show=True,save=False,save_path
         plt.show()
     if save:
         plt.savefig(join(save_path,save_name), dpi=400)
-
-MNS_F, MNS = processImage("C:/Users/djab-/OneDrive/Bureau/Projet recherche/E494/dsm",30)
-# Afficher le graphe
