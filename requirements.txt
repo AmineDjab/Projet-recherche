@@ -4,4 +4,3 @@ persim
 scipy
 imageio
 numpy
-networkx
