@@ -6,15 +6,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage import median_filter
 
-MNS_1 = imageio.imread('C:/Users/djab-/OneDrive/Bureau/Projet recherche/E494/dsm/DSC_1/dsm.tif')  # Pour corriger la micro-pente
+MNS_1 = None
 RESOLUTION  = 0.14
 
+def computeMNS_1(source_directory_path):
+    global MNS_1
+    MNS_1 = imageio.imread(join(source_directory_path,'DSC_1','dsm.tif'))
+
+
 def processImages(source_directory_path,image_numbers):
+    computeMNS_1(source_directory_path)
     for image_number in image_numbers:
         processImage(source_directory_path,image_number)
 
 
 def processImage(source_directory_path,image_number):
+    global MNS_1
     DSC = f'DSC_{image_number}'
     MNS = imageio.imread(join(source_directory_path,DSC,"dsm.tif"))
     MNS1 = imageio.imread(join(source_directory_path,DSC,"dsm.tif"))

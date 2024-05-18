@@ -16,9 +16,9 @@ def manageKwargs(kwargs_dict):
     return DEP , UXNORM , UYNORM , SHEAR , SECONDINV , CURL , DIVERGENCE , ONOFF , ZONE
 
 
-def computeFramesDivergence(frame_numbers,source_directory_path,**kwargs):
+def computeFramesDivergence(frame_numbers,source_directory_path, show=False, **kwargs):
     for frame_number in frame_numbers:
-        computeFrameDivergence(frame_number,source_directory_path,**kwargs)
+        computeFrameDivergence(frame_number,source_directory_path, show,**kwargs)
 
 
 def processDEFINENAME(UxZoom,UyZoom,AxisXZ,AxisYZ,dx,dy):
@@ -79,7 +79,7 @@ def processDEFINENAME2(frame_directory_path,zoom):
     return UxZoom , UyZoom , AxisXZ , AxisYZ , dx , dy
 
 
-def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
+def computeFrameDivergence(frame_number,source_directory_path, show=False,**kwargs):
     DEP , UXNORM , UYNORM , SHEAR , SECONDINV , CURL , DIVERGENCE , ONOFF , ZONE = manageKwargs(kwargs)
     FRAME_DIRECTORY_PATH = join(source_directory_path,f"frame{frame_number}")
 
@@ -101,13 +101,15 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         label_type = 'Displacement'
         DeplZ = np.sqrt(UxZoom**2 + UyZoom**2)
         matrixes['Displacement'] = DeplZ
-        plotHeatmap(DeplZ, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm)
+        if show:
+            plotHeatmap(DeplZ, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm)
 
     if UXNORM:
         label_type = 'Fault-parallel'
         UxNorma = (UxZoom * 100) / 0.5
         matrixes['Fault-parallel'] = UxNorma
-        plotHeatmap(UxNorma, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(UxNorma, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if UYNORM:
         label_type = 'Fault-normal'
@@ -115,7 +117,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['Fault-normal'] = UyNorma
         min_limit = -0.1
         max_limit = 0.1
-        plotHeatmap(UyNorma, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(UyNorma, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if SECONDINV:
         label_type = 'SecondInvariant'
@@ -123,7 +126,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['SecondInvariant'] = inv2
         min_limit = 0
         max_limit = 0.008
-        plotHeatmap(inv2, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(inv2, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if ONOFF:
         label_type = 'On-off-fault'
@@ -137,7 +141,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['On-off-fault'] = OOf
         min_limit = 0
         max_limit = 0.2
-        plotHeatmap(OOf, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(OOf, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if SHEAR:
         label_type = 'Shear'
@@ -145,8 +150,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['Shear'] = shear_xy
         min_limit = -0.05
         max_limit = 0.05
-
-        plotHeatmap(shear_xy, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(shear_xy, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if CURL:
         label_type = 'Curl'
@@ -154,7 +159,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['Curl'] = curl_df
         min_limit = -0.3
         max_limit = 0.1
-        plotHeatmap(curl_df, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(curl_df, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     if DIVERGENCE:
         label_type = 'Divergence'
@@ -162,7 +168,8 @@ def computeFrameDivergence(frame_number,source_directory_path,**kwargs):
         matrixes['Divergence'] = div
         min_limit = -0.02
         max_limit = 0.02
-        plotHeatmap(div, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
+        if show:
+            plotHeatmap(div, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
     return matrixes
 
@@ -176,7 +183,3 @@ def plotHeatmap(data, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, vmin=None,
     plt.colorbar(label=label_type)
     plt.xlabel('x [m]')
     plt.ylabel('y [m]')
-
-
-SOURCE_DIR_PATH = 'C:\\Users\\djab-\\OneDrive\\Bureau\\Projet recherche\\E494\\correlation'
-computeFramesDivergence([40,41],SOURCE_DIR_PATH,DIVERGENCE=1)

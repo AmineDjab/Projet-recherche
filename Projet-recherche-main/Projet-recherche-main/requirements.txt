@@ -1,6 +1,0 @@
-matplotlib
-ripser
-persim
-scipy
-imageio
-numpy
