@@ -1,5 +1,3 @@
-from ripser import ripser
-from persim import plot_diagrams
 import imageio
 from os.path import join
 import matplotlib.pyplot as plt
