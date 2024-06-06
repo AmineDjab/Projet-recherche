@@ -2,8 +2,7 @@
 import matplotlib.pyplot as plt
 from ripser import ripser, lower_star_img
 from persim import plot_diagrams
-import PIL
-import numpy as np
+from scipy.ndimage import gaussian_filter
 
 plt.rcParams.update({
     "text.usetex": False,
@@ -38,7 +37,14 @@ def plotImagePersistenceDiagram(image):
     """
     Computes and plots the persistence diagram of a given image
     """
-    dgm = lower_star_img(-image)
+    dgm = lower_star_img(image)
 
     plt.figure(figsize=(6, 6))
     plot_diagrams(dgm, lifetime=True)
+
+
+def applyGaussianFilter(image, sigma=1):
+    """
+    Applies a Gaussian filter to the given image
+    """
+    return gaussian_filter(image, sigma)

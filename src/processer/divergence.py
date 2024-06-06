@@ -1,5 +1,5 @@
 from os.path import join
-import imageio
+import PIL
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -16,9 +16,9 @@ def manageKwargs(kwargs_dict):
     return DEP , UXNORM , UYNORM , SHEAR , SECONDINV , CURL , DIVERGENCE , ONOFF , ZONE
 
 
-def computeFramesDivergence(frame_numbers,source_directory_path, show=False, **kwargs):
+def computeFramesDivergence(frame_numbers,source_directory_path, show=False, gaussian_filter=False, **kwargs):
     for frame_number in frame_numbers:
-        computeFrameDivergence(frame_number,source_directory_path, show,**kwargs)
+        computeFrameDivergence(frame_number,source_directory_path, show, gaussian_filter, **kwargs)
 
 
 def processDEFINENAME(UxZoom,UyZoom,AxisXZ,AxisYZ,dx,dy):
@@ -43,8 +43,8 @@ def processDEFINENAME(UxZoom,UyZoom,AxisXZ,AxisYZ,dx,dy):
 
 
 def processDEFINENAME2(frame_directory_path,zoom):
-    Ux = imageio.imread(join(frame_directory_path, 'Px1_Num6_DeZoom1_LeChantier.tif'))
-    Uy = imageio.imread(join(frame_directory_path, 'Px2_Num6_DeZoom1_LeChantier.tif'))
+    Ux = np.asarray(PIL.Image.fromarray(plt.imread(join(frame_directory_path, 'Px1_Num6_DeZoom1_LeChantier.tif'))).convert('L'))
+    Uy = np.asarray(PIL.Image.fromarray(plt.imread(join(frame_directory_path, 'Px2_Num6_DeZoom1_LeChantier.tif'))).convert('L'))
 
     PXL = 4.35
     Ux /= PXL
@@ -79,7 +79,7 @@ def processDEFINENAME2(frame_directory_path,zoom):
     return UxZoom , UyZoom , AxisXZ , AxisYZ , dx , dy
 
 
-def computeFrameDivergence(frame_number,source_directory_path, show=False,**kwargs):
+def computeFrameDivergence(frame_number,source_directory_path, show=False, gaussian_filter=False,**kwargs):
     DEP , UXNORM , UYNORM , SHEAR , SECONDINV , CURL , DIVERGENCE , ONOFF , ZONE = manageKwargs(kwargs)
     FRAME_DIRECTORY_PATH = join(source_directory_path,f"frame{frame_number}")
 
@@ -171,6 +171,9 @@ def computeFrameDivergence(frame_number,source_directory_path, show=False,**kwar
         if show:
             plotHeatmap(div, label_type, xmin_mm, xmax_mm, ymin_mm, ymax_mm, min_limit, max_limit)
 
+    if gaussian_filter:
+        for matrix_name, matrix in matrixes.items():
+            matrixes[matrix_name] = gaussian_filter(matrix, 1)
     return matrixes
 
 
